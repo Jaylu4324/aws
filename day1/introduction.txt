@@ -1,0 +1,47 @@
+(1) What is Cloud?
+
+-> Cloud is a service that lets you use servers, storage, databases, and other IT resources over the internet instead of buying and managing your own hardware.
+
+(2) Public vs Private Cloud
+
+-> Public Cloud: Cloud resources are owned by a cloud provider and shared among many customers (Example: Amazon Web Services, Microsoft Azure, Google Cloud).
+
+-> Private Cloud: Cloud infrastructure is used by only one organization and gives more control and security.
+
+(3) Why is Public Cloud so popular?
+
+-> Because it is:
+
+Low cost (pay only for what you use)
+Easy to start
+Scales quickly
+No hardware maintenance
+Available from anywhere
+
+(4) Why AWS?
+
+-> AWS is popular because:
+
+Largest cloud provider
+Many cloud services
+Highly reliable
+Secure
+Global data centers
+High demand for AWS skills
+
+(5) Why are some companies moving back to Private Cloud?
+
+-> Some companies move back because:
+
+Better control over data
+Stronger security
+Easier to meet compliance rules
+Can reduce costs for large, predictable workloads
+
+(6) Create an AWS account and get started
+-> Search aws website
+ 
+ Select create account options
+ -> Provide all the details like mail,password
+    number, payment info , and verification do and 
+    once you do your account will be created.
