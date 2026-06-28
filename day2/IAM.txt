@@ -1,0 +1,302 @@
+Before IAM
+
+When you create an AWS account, AWS gives you one Root User.
+
+Think of it like this:
+
+AWS Account
+      │
+      ▼
+Root User
+
+The Root User has 100% access.
+
+It can:
+
+Delete the whole AWS account ❌
+Delete EC2
+Delete S3
+Delete databases
+Change billing
+Close the account
+
+It can do everything.
+
+Why not give everyone the Root User login?
+
+Imagine a company has 50 employees.
+
+If everyone uses:
+
+Email: company@gmail.com
+Password: ********
+
+Problems:
+
+Who deleted the EC2 instance? ❌
+Who created 100 servers? ❌
+Someone leaves the company but still knows the password. ❌
+One mistake can delete the entire AWS account. ❌
+
+Very dangerous.
+
+So AWS created IAM
+
+Instead of everyone using the Root User,
+
+AWS says:
+
+"Create separate identities for each person."
+
+Example
+
+Root User
+     │
+     ├── Jay
+     ├── Rahul
+     ├── Amit
+
+Each person gets:
+
+Their own username
+Their own password
+Their own permissions
+
+Now AWS knows exactly who did what.
+
+Why Groups?
+
+Suppose you have:
+
+100 Developers
+20 Testers
+10 Admins
+
+Without Groups:
+
+You must give permissions 100 times.
+
+Jay → EC2
+Rahul → EC2
+Amit → EC2
+...
+100 users
+
+Lots of work.
+
+Instead:
+
+Developer Group
+      │
+ ├── Jay
+ ├── Rahul
+ ├── Amit
+
+Give the permission once to the group.
+
+Everyone in the group gets it automatically.
+
+Why Policies?
+
+A user or group exists, but AWS still doesn't know:
+
+"What can they do?"
+
+Policy answers that.
+
+Example:
+
+Developer Policy
+
+✔ Create EC2
+✔ Start EC2
+✔ Stop EC2
+❌ Delete S3 Bucket
+
+Policy = Permission document.
+
+Without a policy:
+
+User can log in, but cannot do anything.
+
+Why Roles?
+
+Now think about AWS services.
+
+Example:
+
+EC2 Server
+
+It wants to download files from S3.
+
+Should you save your AWS username and password inside the EC2 server?
+
+EC2
+Username: Jay
+Password: ****
+
+No.
+
+If the server is hacked,
+the attacker gets your AWS account credentials.
+
+Very unsafe.
+
+Instead:
+
+EC2
+   │
+IAM Role
+   │
+S3
+
+AWS gives the EC2 instance temporary credentials through the IAM Role.
+
+Benefits:
+
+No password stored.
+Credentials expire automatically.
+More secure.
+
+Roles are mainly used by AWS services, applications, or users from another AWS account that need temporary access.
+
+Complete Flow
+AWS Account
+      │
+Root User (used rarely)
+      │
+Create IAM Users
+      │
+Add Users to Groups
+      │
+Attach Policies (permissions)
+      │
+AWS Services use Roles for temporary access
+Easy memory trick
+Root User = Owner of the company (full control, don't use daily)
+IAM User = Employee
+Group = Department (Developers, Testers, Admins)
+Policy = Rules (what they can and can't do)
+Role = Temporary ID card for AWS services (like EC2 accessing S3)
+
+
+
+# IAM Role - Real World Human Example
+
+Imagine you own a company.
+
+There are three people:
+
+* Owner (You)
+* Employee (Krunal)
+* Auditor (Rahul)
+
+---
+
+## IAM User
+
+Krunal works in your company every day.
+
+You create an ID for him.
+
+```text
+Username: krunal
+Password: ****
+```
+
+Krunal logs in every day.
+
+This is an **IAM User**.
+
+---
+
+## The Problem
+
+One day, an **external auditor (Rahul)** comes to inspect your company.
+
+Rahul is **not your employee**.
+
+Should you create a permanent employee account for him?
+
+**No.**
+
+Because:
+
+* He only needs access for today.
+* Tomorrow he will leave.
+* He doesn't need permanent access.
+
+---
+
+## Solution: Give Him a Temporary Role
+
+Instead of creating a permanent account, you say:
+
+> "For today, Rahul can view financial records only."
+
+Rahul gets temporary access.
+
+After the audit is complete, the permission is removed automatically.
+
+This is exactly an **IAM Role**.
+
+---
+
+## Why Not Create an IAM User?
+
+If you create an IAM User:
+
+* You must create a username.
+* You must create a password.
+* You must remember to delete the account later.
+* If you forget, Rahul can still log in after one month.
+
+This is a security risk.
+
+---
+
+## Why IAM Role?
+
+With an IAM Role:
+
+* No permanent account.
+* Temporary permissions.
+* Access automatically expires.
+* More secure.
+
+---
+
+## AWS Example
+
+Imagine Company A owns an AWS account.
+
+A consultant from Company B needs access to check only the EC2 servers for one day.
+
+Instead of creating an IAM User for the consultant, Company A creates an **IAM Role**.
+
+The consultant **assumes the role**, gets temporary permissions, completes the work, and then the access expires.
+
+---
+
+## Easy Memory Trick
+
+**IAM User**
+= Permanent employee
+= Permanent login
+
+**IAM Role**
+= Temporary visitor/consultant
+= Temporary permissions
+
+## One-Line Definition
+
+**An IAM Role is a set of temporary permissions that someone or something can assume when needed, without creating a permanent IAM User.**
+
+
+Practicle Example
+-> Login Root user
+-> Create one iam user ex (developer)
+-> Assign policy to that user and check if that user granted that permissions or not via login
+-> Create create and assign policies to that group and add users in that group and check if that user granted that policie or not .
+-> Group policies and user added policies will be appended ex if user already has ec2 permission and we have created group having s3 permission
+   user will got the both permissiosns group will not override the previously assigned permissions.
