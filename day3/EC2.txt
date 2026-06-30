@@ -1,0 +1,407 @@
+# AWS EC2 (Elastic Compute Cloud)
+
+## What is EC2?
+
+**EC2 (Elastic Compute Cloud)** is a virtual server provided by AWS.
+
+Instead of buying a physical server, AWS lets you create a server in the cloud within a few minutes.
+
+You can install:
+
+* Linux
+* Windows
+* Websites
+* Applications
+* Databases
+
+Just like you would on your own computer.
+
+---
+
+## Why Do We Need EC2?
+
+Without EC2:
+
+* Buy a physical server.
+* Keep it in your office or data center.
+* Pay for electricity.
+* Maintain the hardware.
+* Upgrade CPU or RAM manually.
+
+This is expensive and time-consuming.
+
+With EC2:
+
+* Create a server in minutes.
+* Choose the CPU, RAM, and storage you need.
+* Increase or decrease resources anytime.
+* Pay only for what you use.
+* AWS manages the physical hardware.
+
+---
+
+## Why is it called Elastic?
+
+**Elastic** means you can easily change the server size whenever needed.
+
+Example:
+
+Today:
+
+* 2 vCPU
+* 4 GB RAM
+
+Tomorrow your website gets more traffic.
+
+You can upgrade to:
+
+* 8 vCPU
+* 32 GB RAM
+
+No need to buy a new server.
+
+---
+
+# Regions and Availability Zones
+
+Before creating an EC2 instance, AWS asks you to choose a **Region**.
+
+## What is a Region?
+
+A **Region** is a geographical location where AWS has data centers.
+
+Examples:
+
+* Mumbai
+* Singapore
+* London
+* Tokyo
+
+Choose the Region closest to your users for better performance.
+
+### Example
+
+If most of your customers are in India, choose the **Mumbai Region** so your website loads faster.
+
+---
+
+## What is an Availability Zone (AZ)?
+
+Each Region contains multiple **Availability Zones (AZs)**.
+
+Example:
+
+```text
+Mumbai Region
+   ├── AZ-1
+   ├── AZ-2
+   └── AZ-3
+```
+
+Each AZ is a separate data center with its own power, cooling, and networking.
+
+When you launch an EC2 instance, it runs inside one AZ.
+
+### Why do we need AZs?
+
+If AZ-1 has a power failure, your application can continue running in AZ-2.
+
+This provides **High Availability**.
+
+### Easy Example
+
+* **Region = City**
+* **Availability Zone = Building in that city**
+* **EC2 = Your office inside one building**
+
+If one building has a problem, you can continue working from another building.
+
+---
+
+# Types of EC2 Instances
+
+## 1. General Purpose
+
+**Balanced CPU, RAM, and networking.**
+
+Best for:
+
+* Websites
+* Small applications
+* Development servers
+
+**Example:** A family car – good for everyday use.
+
+---
+
+## 2. Compute Optimized
+
+**More CPU power.**
+
+Best for:
+
+* Game servers
+* Video encoding
+* Batch processing
+
+**Example:** A race car – built for speed.
+
+---
+
+## 3. Memory Optimized
+
+**More RAM.**
+
+Best for:
+
+* Large databases
+* Data analytics
+* In-memory applications
+
+**Example:** A library with many bookshelves for storing lots of books.
+
+---
+
+## 4. Accelerated Computing
+
+**Uses GPUs or special hardware.**
+
+Best for:
+
+* AI
+* Machine Learning
+* Graphics rendering
+* Video processing
+
+**Example:** An excavator does heavy work much faster than people using shovels.
+
+---
+
+## 5. Storage Optimized
+
+**Very fast storage performance.**
+
+Best for:
+
+* Big databases
+* Log processing
+* Data streaming
+
+**Example:** A warehouse with many loading docks so goods move quickly.
+
+---
+
+## 6. HPC (High Performance Computing)
+
+**Designed for extremely powerful computing.**
+
+Best for:
+
+* Weather forecasting
+* Scientific research
+* Complex simulations
+* Financial modeling
+
+**Example:** A supercomputer used in a research lab.
+
+---
+
+# Easy Memory Trick
+
+| Type                  | Think Of      | Best For             |
+| --------------------- | ------------- | -------------------- |
+| General Purpose       | Family Car    | Everyday workloads   |
+| Compute Optimized     | Race Car      | High CPU tasks       |
+| Memory Optimized      | Library       | Large RAM workloads  |
+| Accelerated Computing | Excavator     | AI & Graphics        |
+| Storage Optimized     | Warehouse     | Fast storage         |
+| HPC                   | Supercomputer | Scientific computing |
+
+---
+
+# One-Line Interview Answer
+
+**Amazon EC2 is a virtual server in AWS that lets us run applications without buying physical hardware. We choose a Region (location), an Availability Zone (data center), and an instance type based on our application's CPU, memory, or storage requirements.**
+
+
+
+
+
+
+Imagine you choose:
+
+Region: Mumbai
+
+Availability Zone: AZ-1
+
+EC2: My Website Server
+
+Your setup looks like this:
+
+Mumbai Region
+
+AZ-1
+└── EC2 (Website)
+
+AZ-2
+└── Nothing
+
+AZ-3
+└── Nothing
+
+Now suppose AZ-1 loses power.
+
+What happens?
+
+❌ Your EC2 stops.
+❌ Your website goes down.
+❌ AWS does not automatically move your EC2 to AZ-2.
+
+Why?
+
+Because your EC2 instance physically runs in AZ-1.
+
+So why do we have multiple Availability Zones?
+
+Because you can design your application to use them.
+
+Example:
+
+Mumbai Region
+
+AZ-1
+└── EC2-1
+
+AZ-2
+└── EC2-2
+
+You also place a Load Balancer in front:
+
+          Users
+            │
+      Load Balancer
+        │       │
+     EC2-1   EC2-2
+      AZ-1    AZ-2
+
+Now:
+
+If AZ-1 fails, EC2-1 is unavailable.
+The Load Balancer sends all traffic to EC2-2.
+Your website keeps working.
+What about the data?
+
+It depends on where the data is stored.
+
+Case 1: Data is only on EC2 ❌
+AZ-1
+EC2
+└── Images
+
+If AZ-1 fails, those images are unavailable until the server comes back.
+
+Case 2: Data is stored in AWS storage services ✅
+
+For example:
+
+S3
+Multi-AZ databases
+EFS
+
+These services automatically keep copies across multiple Availability Zones (depending on how they're configured).
+
+So even if AZ-1 fails, your data is still available.
+
+
+
+
+When you create an EC2 instance, AWS asks you to create or select a Key Pair.
+
+What is a Key Pair?
+
+A Key Pair is used to securely connect to your EC2 instance using SSH (Linux) or RDP (Windows).
+
+A Key Pair has two keys:
+
+Public Key 🔓
+Private Key 🔐
+
+They work together.
+
+Which key do we download?
+
+When you create a new Key Pair:
+
+✅ AWS stores the Public Key on the EC2 instance automatically.
+✅ You download the Private Key (.pem or .ppk file).
+
+You only get the Private Key once. If you lose it, AWS cannot download it again.
+
+How does it work?
+Your Laptop
+     │
+Private Key (.pem)
+     │
+SSH Connection
+     │
+EC2 Instance
+     │
+Public Key
+
+When you connect:
+
+SSH uses your Private Key.
+EC2 checks if it matches the Public Key stored on the server.
+If they match, AWS allows you to log in.
+Real-World Example
+
+Think of a house.
+
+The lock on the door = Public Key (already installed on the house).
+The key in your pocket = Private Key (you download it).
+
+Only the correct key can open that lock.
+
+Why not use only a password?
+
+Passwords:
+
+Can be guessed.
+Can be stolen.
+Are less secure.
+
+Key Pairs:
+
+Much more secure.
+Used for passwordless authentication.
+Easy Memory Trick
+Public Key → Stored on the EC2 instance by AWS.
+Private Key → Downloaded by you (.pem file).
+Both keys must match to log in.
+
+After taking access to servers
+-> We will get error for the too open permission for the key.
+-> we have to restrict the permission of the key to be limited .
+-> Again access to the server it will work fine .
+
+
+Practicle
+-> Install java and jenkins and check server of jenkins is running or not.
+-> we need to to open 8080 port for the jenkins .
+
+
+
+
+Easy way to remember
+Spot Requests → Cheapest, but AWS can stop the instance.
+Savings Plans → Commit usage, get discounts.
+Reserved Instances → Reserve a specific instance, get discounts.
+Dedicated Hosts → Your own physical server.
+Capacity Reservations → Reserve capacity, not discounts.
+Capacity Manager → Manage your reserved capacity.
+Which one is most commonly used?
+✅ On-Demand (default, pay as you use)
+✅ Savings Plans (for production to save money)
+✅ Spot Instances (for testing and batch jobs)
+
+The others (Reserved Instances, Dedicated Hosts, Capacity Reservations) are used in specific business or enterprise scenarios.
